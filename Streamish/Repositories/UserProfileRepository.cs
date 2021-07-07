@@ -45,6 +45,98 @@ namespace Streamish.Repositories
             }
         }
 
+        public UserProfile GetUserProfileById(int id)
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                    SELECT u.Name, u.Email, u.ImageUrl AS UserProfileImageUrl, u.DateCreated AS UserDate 
+                    FROM UserProfile u
+                    WHERE u.Id = @Id";
+
+                    DbUtils.AddParameter(cmd, "@Id", id);
+
+                    var reader = cmd.ExecuteReader();
+
+                    UserProfile userProfile = null;
+                    if (reader.Read())
+                    {
+                        userProfile = new UserProfile()
+                        {
+                            Id = id,
+                            Name = DbUtils.GetString(reader, "Name"),
+                            Email = DbUtils.GetString(reader, "Email"),
+                            ImageUrl = DbUtils.GetString(reader, "UserProfileImageUrl"),
+                            DateCreated = DbUtils.GetDateTime(reader, "UserDate")
+                        };
+                    }
+
+                    reader.Close();
+
+                    return userProfile;
+                }
+            }
+        }
+
+        public UserProfile GetUserProfileByIdWithVideos(int id)
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                    SELECT u.Name, u.Email, u.ImageUrl AS UserProfileImageUrl, u.DateCreated AS UserDate,
+                           v.Id AS VideoId, v.Title, v.Description, v.Url, 
+                           v.DateCreated AS VideoDateCreated, v.UserProfileId As VideoUserProfileId
+                    FROM UserProfile u
+                    LEFT JOIN Video v on v.UserProfileId = u.Id
+                    WHERE u.Id = @Id";
+
+                    DbUtils.AddParameter(cmd, "@Id", id);
+
+                    var reader = cmd.ExecuteReader();
+
+                    UserProfile userProfile = null;
+                    while (reader.Read())
+                    {
+                        if (userProfile == null)
+                        {
+                            userProfile = new UserProfile()
+                            {
+                                Id = id,
+                                Name = DbUtils.GetString(reader, "Name"),
+                                Email = DbUtils.GetString(reader, "Email"),
+                                ImageUrl = DbUtils.GetString(reader, "UserProfileImageUrl"),
+                                DateCreated = DbUtils.GetDateTime(reader, "UserDate"),
+                                Videos = new List<Video>()
+                            };
+
+                            if (DbUtils.IsNotDbNull(reader, "VideoId"))
+                            {
+                                userProfile.Videos.Add(new Video()
+                                {
+                                    Id = DbUtils.GetInt(reader, "VideoId"),
+                                    Title = DbUtils.GetString(reader, "Title"),
+                                    Description = DbUtils.GetString(reader, "Description"),
+                                    DateCreated = DbUtils.GetDateTime(reader, "VideoDateCreated"),
+                                    Url = DbUtils.GetString(reader, "Url"),
+                                    UserProfileId = id,
+                                });
+                            }
+                        }
+                    }
+
+                    reader.Close();
+
+                    return userProfile;
+                }
+            }
+        }
+
         public void Add(UserProfile userProfile)
         {
             using (var conn = Connection)
