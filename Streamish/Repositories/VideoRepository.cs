@@ -121,7 +121,16 @@ namespace Streamish.Repositories
                                 Id = DbUtils.GetInt(reader, "CommentId"),
                                 Message = DbUtils.GetString(reader, "Message"),
                                 VideoId = videoId,
-                                UserProfileId = DbUtils.GetInt(reader, "CommentUserProfileId")
+                                UserProfileId = DbUtils.GetInt(reader, "CommentUserProfileId"),
+                                //UserProfile = new UserProfile()
+                                //{
+                                //    Id = DbUtils.GetInt(reader, "CommentUserProfileId"),
+                                //    Name = DbUtils.GetString(reader, "Name"),
+                                //    Email = DbUtils.GetString(reader, "Email"),
+                                //    DateCreated = DbUtils.GetDateTime(reader, "UserProfileDateCreated"),
+                                //    ImageUrl = DbUtils.GetString(reader, "UserProfileImageUrl"),
+
+                                //}
                             });
                         }
                     }
