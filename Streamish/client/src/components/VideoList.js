@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Video from './Video';
 import { getAllVideos, videoSearch } from "../modules/videoManager";
 import SearchCard from "./SearchCard";
+import NewVideoForm from "./VideoForm";
 
 const VideoList = () => {
     const [videos, setVideos] = useState([]);
@@ -18,7 +19,6 @@ const VideoList = () => {
         videoSearch(search.search)
             .then(res => setVideos(res));
     };
-    // debugger
 
     const handleInputChange = (event) => {
         let newSearch = { ...search }
@@ -27,17 +27,20 @@ const VideoList = () => {
         setSearch(newSearch);
     };
 
-
-    // useEffect(() => {
-    //     searchForVideos(search);
-    // }, [result]);
-
     useEffect(() => {
         getVideos();
     }, []);
 
     return (
         <>
+            <div className="container">
+                <div className="row justify-content-center">
+                    <NewVideoForm />
+                </div>
+            </div>
+
+            <hr />
+
             <div className="container">
                 <div className="row justify-content-center">
                     <form>
@@ -61,11 +64,7 @@ const VideoList = () => {
                         </div> :
                         videos.map(video => <SearchCard result={video} key={video.id} />)}
                 </div>
-                {/* <div className="row justify-content-center">
-                    {videos.map((video) => (
-                        <Video video={video} key={video.id} />
-                    ))}
-                </div> */}
+
             </div>
         </>
     );
