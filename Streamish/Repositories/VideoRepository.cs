@@ -197,7 +197,7 @@ namespace Streamish.Repositories
                 {
                     cmd.CommandText = @"
                           SELECT v.Title, v.Description, v.Url, v.DateCreated AS VideoDate, v.UserProfileId,
-                                 u.Name, u.Email, u.ImageUrl, u.DateCreated AS UserDate,
+                                 u.Id AS UserId, u.Name, u.Email, u.ImageUrl, u.DateCreated AS UserDate,
                                  c.Id AS CommentId, c.Message, c.UserProfileId AS CommentUserProfileId
                             FROM Video v
                             LEFT JOIN UserProfile u ON u.Id = v.UserProfileId
@@ -223,6 +223,7 @@ namespace Streamish.Repositories
                             UserProfileId = DbUtils.GetInt(reader, "UserProfileId"),
                             UserProfile = new UserProfile()
                             {
+                                Id = DbUtils.GetInt(reader, "UserId"),
                                 Name = DbUtils.GetString(reader, "Name"),
                                 Email = DbUtils.GetString(reader, "Email"),
                                 ImageUrl = DbUtils.GetString(reader, "ImageUrl"),

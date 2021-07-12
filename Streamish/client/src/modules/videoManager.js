@@ -21,3 +21,11 @@ export const addVideo = (video) => {
         body: JSON.stringify(video),
     });
 };
+
+export const getVideoById = (id) => {
+    return fetch(`${baseUrl}/GetVideoByIdWithComments?id=${id}`).then(res => res.json());
+}
+
+export const getProfileByIdWithVideos = (id) => {
+    return fetch(`/api/UserProfile/GetUserProfileByIdWithVideos?id=${id}`).then(res => res.json());
+}

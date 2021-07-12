@@ -6,7 +6,7 @@ const SearchCard = ({ result }) => {
 
     return (
         <div>
-            <Video video={result} />
+            <Video video={result} userProfile={result.userProfile} />
         </div>
     );
 };
