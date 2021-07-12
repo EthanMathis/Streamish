@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
+import { addVideo } from "../modules/videoManager";
 
 
 const NewVideoForm = () => {
@@ -17,22 +18,27 @@ const NewVideoForm = () => {
         setNewVideo(vidToBeAdded);
     }
 
+    const addNewVideo = (event) => {
+        event.preventDefault();
+        addVideo(newVideo);
+    }
+
     return (
 
         <Form>
             <FormGroup>
                 <Label for="title">Title</Label>
-                <Input type="text" name="Url" id="Url" placeholder="Name your new upload" onChange={handleInputChange} />
+                <Input type="text" name="title" id="title" placeholder="Name your new video" onChange={handleInputChange} />
             </FormGroup>
             <FormGroup>
-                <Label for="Url">Url</Label>
-                <Input type="text" name="Url" id="Url" placeholder="Enter a YouTube Url here" onChange={handleInputChange} />
+                <Label for="url">Url</Label>
+                <Input type="text" name="url" id="url" placeholder="Enter a YouTube Url" onChange={handleInputChange} />
             </FormGroup>
             <FormGroup>
                 <Label for="description">Description</Label>
                 <Input type="textarea" name="description" id="description" placeholder="Optional video description..." onChange={handleInputChange} />
             </FormGroup>
-            <Button onClick={handleSubmit}>Submit</Button>
+            <Button onClick={addNewVideo}>Submit</Button>
         </Form>
     )
 };
