@@ -114,7 +114,7 @@ namespace Streamish.Repositories
                                 DateCreated = DbUtils.GetDateTime(reader, "UserDate"),
                                 Videos = new List<Video>()
                             };
-
+                        }
                             if (DbUtils.IsNotDbNull(reader, "VideoId"))
                             {
                                 userProfile.Videos.Add(new Video()
@@ -127,7 +127,7 @@ namespace Streamish.Repositories
                                     UserProfileId = id,
                                 });
                             }
-                        }
+                        
                     }
 
                     reader.Close();

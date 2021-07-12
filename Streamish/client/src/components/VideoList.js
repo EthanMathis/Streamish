@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Video from './Video';
 import { getAllVideos, videoSearch } from "../modules/videoManager";
 import SearchCard from "./SearchCard";
-import NewVideoForm from "./VideoForm";
+
 
 const VideoList = () => {
     const [videos, setVideos] = useState([]);
@@ -35,14 +35,6 @@ const VideoList = () => {
         <>
             <div className="container">
                 <div className="row justify-content-center">
-                    <NewVideoForm />
-                </div>
-            </div>
-
-            <hr />
-
-            <div className="container">
-                <div className="row justify-content-center">
                     <form>
                         <input type="text"
                             id="search"
@@ -55,16 +47,14 @@ const VideoList = () => {
                     </form>
                 </div>
                 <div>
-
                     {videos.length === 0 ?
                         <div className="row justify-content-center">
                             {videos.map((video) => (
-                                <Video video={video} key={video.id} />
+                                <Video video={video} userProfile={video.userProfile} key={video.id} />
                             ))}
                         </div> :
                         videos.map(video => <SearchCard result={video} key={video.id} />)}
                 </div>
-
             </div>
         </>
     );
