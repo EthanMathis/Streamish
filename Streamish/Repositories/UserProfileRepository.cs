@@ -45,7 +45,7 @@ namespace Streamish.Repositories
             }
         }
 
-        public UserProfile GetUserProfileById(int id)
+        public UserProfile GetUserProfileById(string firebaseId)
         {
             using (var conn = Connection)
             {
@@ -53,11 +53,11 @@ namespace Streamish.Repositories
                 using (var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                    SELECT u.Name, u.Email, u.ImageUrl AS UserProfileImageUrl, u.DateCreated AS UserDate 
+                    SELECT u.Id, u.FirebaseUserId ,u.Name, u.Email, u.ImageUrl AS UserProfileImageUrl, u.DateCreated AS UserDate 
                     FROM UserProfile u
-                    WHERE u.Id = @Id";
+                    WHERE u.FirebaseUserId = @Id";
 
-                    DbUtils.AddParameter(cmd, "@Id", id);
+                    DbUtils.AddParameter(cmd, "@Id", firebaseId);
 
                     var reader = cmd.ExecuteReader();
 
@@ -66,7 +66,8 @@ namespace Streamish.Repositories
                     {
                         userProfile = new UserProfile()
                         {
-                            Id = id,
+                            Id = DbUtils.GetInt(reader, "Id"),
+                            FirebaseUserId = DbUtils.GetString(reader, "FirebaseUserId"),
                             Name = DbUtils.GetString(reader, "Name"),
                             Email = DbUtils.GetString(reader, "Email"),
                             ImageUrl = DbUtils.GetString(reader, "UserProfileImageUrl"),
