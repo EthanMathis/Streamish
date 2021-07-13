@@ -21,14 +21,10 @@ const Video = ({ video, userProfile }) => {
                 <p>
                     <Link to={`/videos/${video.id}`}>
                         <strong>{video.title}</strong>
-                    </Link>                </p>
+                    </Link>
+                </p>
                 <p>{video.description}</p>
                 <hr />
-                {/* <div>
-                    {video.comments?.map((comment) => (
-                        <p>{comment.message}</p>
-                    ))}
-                </div> */}
             </CardBody>
         </Card>
     );
